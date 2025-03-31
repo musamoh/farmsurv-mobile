@@ -1,0 +1,50 @@
+name: "Build iOS app"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: Install Cocoapods
+        run: |
+          gem install cocoapods
+          pod --version
+
+      - name: Install iOS dependencies
+        run: |
+          cd ios
+          pod install
+
+      - name: Build iOS app
+        run: |
+          cd ios
+          xcodebuild -workspace farmsurv-mobile.xcworkspace -scheme farmsurv-mobile -configuration Debug -sdk iphonesimulator -derivedDataPath build
+
+      - name: Upload app
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-app
+          path: ios/build/Build/Products/Debug-iphonesimulator/farmsurv-mobile.app
+          retention-days: 3
