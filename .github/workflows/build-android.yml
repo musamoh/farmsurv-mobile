@@ -26,7 +26,7 @@ jobs:
 
       - name: Generate Android files
         run: |
-          npx react-native init FarmSurv --template react-native-template-typescript
+          npx @react-native-community/cli init FarmSurv --template react-native-template-typescript
           cp -r FarmSurv/android .
           rm -rf FarmSurv
 
