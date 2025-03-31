@@ -61,7 +61,7 @@ jobs:
       - name: Build application
         run: |
              cd ios
-             xcodebuild -workspace FarmSurv.xcworkspace -scheme FarmSurv -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+             xcodebuild -workspace FarmSurv.xcworkspace -scheme FarmSurv -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO EXCLUDED_ARCHS[sdk=iphonesimulator*]=arm64
 
       - name: Upload application
         uses: actions/upload-artifact@v4
