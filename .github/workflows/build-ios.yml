@@ -21,6 +21,7 @@ jobs:
         run: |
              npm i -g corepack
              npm install
+             npm install --save-dev @react-native-community/cli
 
       - name: Install CocoaPods
         run: |
