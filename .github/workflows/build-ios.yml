@@ -42,7 +42,7 @@ jobs:
 
       - name: Generate iOS files
         run: |
-             npx react-native init FarmSurv --template react-native-template-typescript
+             npx @react-native-community/cli init FarmSurv
              cp -r FarmSurv/ios .
              rm -rf FarmSurv
 
