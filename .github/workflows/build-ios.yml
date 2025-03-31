@@ -51,10 +51,17 @@ jobs:
              cd ios
              pod install
 
+      - name: Configure code signing
+        run: |
+             cd ios
+             /usr/libexec/PlistBuddy -c "Set :objects:$(/usr/libexec/PlistBuddy -c "Print :objects:PBXNativeTarget:13B07F861A680F5B00A75B9A:buildConfigurationList" FarmSurv.xcodeproj/project.pbxproj | grep -o '[A-Z0-9]\{24\}'):buildSettings:CODE_SIGN_IDENTITY ''" FarmSurv.xcodeproj/project.pbxproj
+             /usr/libexec/PlistBuddy -c "Set :objects:$(/usr/libexec/PlistBuddy -c "Print :objects:PBXNativeTarget:13B07F861A680F5B00A75B9A:buildConfigurationList" FarmSurv.xcodeproj/project.pbxproj | grep -o '[A-Z0-9]\{24\}'):buildSettings:CODE_SIGNING_REQUIRED NO" FarmSurv.xcodeproj/project.pbxproj
+             /usr/libexec/PlistBuddy -c "Set :objects:$(/usr/libexec/PlistBuddy -c "Print :objects:PBXNativeTarget:13B07F861A680F5B00A75B9A:buildConfigurationList" FarmSurv.xcodeproj/project.pbxproj | grep -o '[A-Z0-9]\{24\}'):buildSettings:CODE_SIGNING_ALLOWED NO" FarmSurv.xcodeproj/project.pbxproj
+
       - name: Build application
         run: |
              cd ios
-             xcodebuild -workspace FarmSurv.xcworkspace -scheme FarmSurv -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' build
+             xcodebuild -workspace FarmSurv.xcworkspace -scheme FarmSurv -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
       - name: Upload application
         uses: actions/upload-artifact@v4
