@@ -12,14 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-          cache-dependency-path: android/**/*.gradle*
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -30,6 +22,21 @@ jobs:
         run: |
           npm i -g corepack
           npm install
+          npm install --save-dev @react-native-community/cli
+
+      - name: Generate Android files
+        run: |
+          npx react-native init FarmSurv --template react-native-template-typescript
+          cp -r FarmSurv/android .
+          rm -rf FarmSurv
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+          cache-dependency-path: android/**/*.gradle*
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
