@@ -24,12 +24,35 @@ jobs:
 
       - name: Install CocoaPods
         run: |
-             cd ./ios
+             sudo gem install cocoapods
+             pod --version
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: Install iOS dependencies
+        run: |
+             npx react-native config
+             npx react-native doctor
+             npx react-native doctor ios
+
+      - name: Generate iOS files
+        run: |
+             npx react-native init FarmSurv --template react-native-template-typescript
+             cp -r FarmSurv/ios .
+             rm -rf FarmSurv
+
+      - name: Install Pods
+        run: |
+             cd ios
              pod install
 
       - name: Build application
         run: |
-             cd ./ios
+             cd ios
              xcodebuild -workspace FarmSurv.xcworkspace -scheme FarmSurv -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' build
 
       - name: Upload application
